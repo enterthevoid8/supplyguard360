@@ -1,0 +1,26 @@
+resources:
+  pipelines:
+    supplyguard_lakeflow:
+      name: supplyguard-lakeflow-${bundle.target}
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      continuous: false
+      libraries:
+        - file:
+            path: ../databricks/pipeline.py
+      configuration:
+        supplyguard.kafka_bootstrap: ${var.kafka_bootstrap}
+        supplyguard.kafka_topic: ${var.kafka_topic}
+  jobs:
+    supplyguard_refresh:
+      name: supplyguard-refresh-${bundle.target}
+      max_concurrent_runs: 1
+      trigger:
+        periodic:
+          interval: 5
+          unit: MINUTES
+      tasks:
+        - task_key: refresh_lakehouse
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.supplyguard_lakeflow.id}

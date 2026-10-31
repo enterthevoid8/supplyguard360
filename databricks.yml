@@ -1,0 +1,27 @@
+bundle:
+  name: supplyguard360
+include:
+  - resources/*.yml
+variables:
+  catalog:
+    description: Existing Unity Catalog catalog
+    default: main
+  schema:
+    description: Existing Unity Catalog schema for SupplyGuard
+    default: supplyguard_dev
+  kafka_bootstrap:
+    description: Private-reachable Kafka/MSK/Confluent broker hostname and port
+  kafka_topic:
+    default: supplyguard.events.v1
+  workspace_host:
+    description: Databricks workspace host (https://...)
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: ${var.workspace_host}
+  prod:
+    mode: production
+    workspace:
+      host: ${var.workspace_host}

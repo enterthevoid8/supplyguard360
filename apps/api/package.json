@@ -1,0 +1,6 @@
+{
+  "name": "supplyguard-api", "version": "0.1.0", "private": true,
+  "scripts": {"build": "tsc", "dev": "tsx watch src/server.ts", "start": "node dist/server.js", "test": "node --test dist/*.test.js"},
+  "dependencies": {"fastify": "^5.2.0", "@fastify/rate-limit": "^10.2.1", "kafkajs": "^2.2.4", "pg": "^8.13.3", "zod": "^3.24.2"},
+  "devDependencies": {"@types/node": "^22.10.0", "@types/pg": "^8.11.11", "tsx": "^4.19.2", "typescript": "^5.7.3"}
+}

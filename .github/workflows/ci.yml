@@ -1,0 +1,33 @@
+name: reference-project-ci
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Compile all Python sources
+        run: python -m compileall -q databricks services scripts tests
+      - name: Run dependency-free contract tests
+        run: python -m unittest discover -s tests -v
+  node-validation:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [apps/api, apps/web]
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: npm test
+        if: matrix.app == 'apps/api'
